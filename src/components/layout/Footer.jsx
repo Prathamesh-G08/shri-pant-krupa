@@ -47,15 +47,13 @@ function Footer() {
             <div className="small" style={{ color: 'rgba(255,255,255,0.6)' }}>
               <div className="mb-1">
                 <i className="bi bi-geo-alt me-1"></i>
+                Shop No. 3, Sai Samrudhi Building,<br />
+                Mahada Colony, Chitralaya,<br />
                 Pune, Maharashtra, India
               </div>
-              <div className="mb-1">
+              <div className="mt-2">
                 <i className="bi bi-clock me-1"></i>
-                Mon–Sat: 8:00 AM – 9:00 PM IST
-              </div>
-              <div>
-                <i className="bi bi-clock me-1"></i>
-                Sunday: 9:00 AM – 1:00 PM IST
+                Mon – Sun: 7:00 AM – 10:00 PM IST
               </div>
             </div>
           </div>
