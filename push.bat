@@ -1,5 +1,5 @@
 @echo off
 git add -A
-git commit -m "Phase 2 and 3 complete"
+git commit -m "Smart category and brand dropdown with add new option"
 git push origin main
-echo PUSH_DONE
+echo DONE
