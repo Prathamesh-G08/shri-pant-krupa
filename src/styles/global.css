@@ -387,14 +387,12 @@ a:hover {
 
 /* ── Mobile Responsive Overrides ── */
 @media (max-width: 768px) {
+  /* Admin layout stacks vertically on mobile */
   .admin-sidebar {
-    width: 100%;
+    width: 100% !important;
     min-height: auto;
-    position: static;
-  }
-
-  .admin-content {
-    margin-left: 0;
+    position: relative !important;
+    flex-direction: row !important;
   }
 
   .product-card .card-img-top {
@@ -404,11 +402,69 @@ a:hover {
   .section-title {
     font-size: 1.1rem;
   }
+
+  /* Table scroll on mobile */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Form full width on mobile */
+  .form-select,
+  .form-control {
+    font-size: 16px; /* Prevents iOS zoom on input focus */
+  }
+
+  /* Navbar search full width */
+  .navbar .input-group {
+    width: 100%;
+  }
+
+  /* Hero banner padding */
+  section.py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
 }
 
 @media (max-width: 576px) {
   .product-card .card-img-top {
-    height: 150px;
+    height: 145px;
+  }
+
+  /* Stack footer columns */
+  .site-footer .row > [class*='col-6'] {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  /* Admin content full width */
+  .admin-content,
+  .flex-grow-1.bg-light {
+    margin-left: 0 !important;
+  }
+
+  /* Smaller section titles */
+  .section-title {
+    font-size: 1rem;
+  }
+
+  /* Better touch targets */
+  .btn {
+    min-height: 40px;
+  }
+
+  /* Product grid 2 columns on very small screens */
+  .row-cols-2 > * {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+/* ── iOS Safari fixes ── */
+@supports (-webkit-touch-callout: none) {
+  .form-control,
+  .form-select {
+    font-size: 16px;
   }
 }
 

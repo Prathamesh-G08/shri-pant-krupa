@@ -84,8 +84,8 @@ function Navbar({ products = [] }) {
         </div>
 
         {/* ── Collapsible Content ── */}
-        <div className={`navbar-collapse ${isNavOpen ? 'd-block' : 'd-none d-md-flex'}`}>
-          <div className="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 w-100 mt-2 mt-md-0 ms-md-3">
+        <div className={`${isNavOpen ? 'd-block' : 'd-none d-md-flex'} w-100`}>
+          <div className="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 w-100 mt-2 mt-md-0 ms-md-3 pb-2 pb-md-0">
 
             {/* ── Search Bar ── */}
             <form

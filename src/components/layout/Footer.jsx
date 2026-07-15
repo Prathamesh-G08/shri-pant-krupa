@@ -1,16 +1,34 @@
 import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
+import { useState } from 'react'
 
-// The live website URL — update this after Vercel deployment
 const WEBSITE_URL = typeof window !== 'undefined'
   ? window.location.origin
   : 'https://shri-pant-krupa.vercel.app'
 
 /**
- * Site footer with store info, quick links, and QR code for easy mobile sharing.
+ * Site footer.
+ * Contains store info, quick links, categories, QR code.
+ * Hidden admin login: clicking the copyright text 3 times navigates to /admin/login.
  */
 function Footer() {
   const currentYear = new Date().getFullYear()
+
+  // Hidden admin access — triple click on copyright text
+  const [clickCount, setClickCount] = useState(0)
+  const [lastClick, setLastClick] = useState(0)
+
+  const handleSecretClick = () => {
+    const now = Date.now()
+    // Reset count if more than 2 seconds between clicks
+    const count = now - lastClick < 2000 ? clickCount + 1 : 1
+    setClickCount(count)
+    setLastClick(now)
+    if (count >= 3) {
+      setClickCount(0)
+      window.location.href = '/admin/login'
+    }
+  }
 
   return (
     <footer className="site-footer" role="contentinfo">
@@ -18,7 +36,7 @@ function Footer() {
         <div className="row g-4">
 
           {/* ── Store Info ── */}
-          <div className="col-12 col-md-4">
+          <div className="col-12 col-sm-6 col-md-4">
             <div className="d-flex align-items-center gap-2 mb-2">
               <i className="bi bi-basket2-fill fs-5 text-white"></i>
               <h5 className="mb-0 text-white fw-bold">Shri Pant Krupa</h5>
@@ -33,55 +51,50 @@ function Footer() {
               </div>
               <div className="mb-1">
                 <i className="bi bi-clock me-1"></i>
-                Mon–Sat: 8:00 AM – 9:00 PM
+                Mon–Sat: 8:00 AM – 9:00 PM IST
               </div>
               <div>
                 <i className="bi bi-clock me-1"></i>
-                Sunday: 9:00 AM – 1:00 PM
+                Sunday: 9:00 AM – 1:00 PM IST
               </div>
             </div>
           </div>
 
           {/* ── Quick Links ── */}
-          <div className="col-6 col-md-2">
+          <div className="col-6 col-sm-3 col-md-2">
             <h6 className="text-white fw-semibold mb-3">Quick Links</h6>
             <ul className="list-unstyled small">
-              <li className="mb-2">
-                <Link to="/" className="footer-link">
-                  <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
-                  Home
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link to="/products" className="footer-link">
-                  <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
-                  All Products
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link to="/products?filter=new" className="footer-link">
-                  <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
-                  New Arrivals
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link to="/products?filter=bestseller" className="footer-link">
-                  <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
-                  Best Sellers
-                </Link>
-              </li>
+              {[
+                { to: '/', label: 'Home' },
+                { to: '/products', label: 'All Products' },
+                { to: '/products?filter=new', label: 'New Arrivals' },
+                { to: '/products?filter=bestseller', label: 'Best Sellers' },
+                { to: '/products?filter=discount', label: 'On Sale' },
+              ].map(link => (
+                <li key={link.to} className="mb-2">
+                  <Link to={link.to} style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}
+                    onMouseOver={e => e.target.style.color = '#fff'}
+                    onMouseOut={e => e.target.style.color = 'rgba(255,255,255,0.7)'}
+                  >
+                    <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* ── Categories placeholder (populated dynamically in Phase 2) ── */}
-          <div className="col-6 col-md-2">
+          {/* ── Categories ── */}
+          <div className="col-6 col-sm-3 col-md-2">
             <h6 className="text-white fw-semibold mb-3">Categories</h6>
             <ul className="list-unstyled small">
-              {['Grains', 'Dairy', 'Snacks', 'Beverages', 'Oils'].map((cat) => (
+              {['Grains', 'Dairy', 'Snacks', 'Beverages', 'Oils', 'Spices'].map(cat => (
                 <li key={cat} className="mb-2">
                   <Link
                     to={`/products?category=${encodeURIComponent(cat)}`}
-                    className="footer-link"
+                    style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}
+                    onMouseOver={e => e.target.style.color = '#fff'}
+                    onMouseOut={e => e.target.style.color = 'rgba(255,255,255,0.7)'}
                   >
                     <i className="bi bi-chevron-right me-1" style={{ fontSize: '0.7rem' }}></i>
                     {cat}
@@ -102,12 +115,7 @@ function Footer() {
               style={{ lineHeight: 0 }}
               aria-label="QR Code to visit Shri Pant Krupa website"
             >
-              <QRCodeSVG
-                value={WEBSITE_URL}
-                size={100}
-                level="M"
-                includeMargin={false}
-              />
+              <QRCodeSVG value={WEBSITE_URL} size={100} level="M" includeMargin={false} />
             </div>
             <p className="small mt-2" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>
               Scan with your phone camera
@@ -117,10 +125,19 @@ function Footer() {
 
         {/* ── Bottom Bar ── */}
         <hr style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-          <p className="small mb-0" style={{ color: 'rgba(255,255,255,0.5)' }}>
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-center text-sm-start">
+
+          {/* Triple-click this text to go to admin login — invisible to regular users */}
+          <p
+            className="small mb-0"
+            style={{ color: 'rgba(255,255,255,0.5)', cursor: 'default', userSelect: 'none' }}
+            onClick={handleSecretClick}
+            title=""
+            aria-hidden="true"
+          >
             © {currentYear} Shri Pant Krupa. All rights reserved.
           </p>
+
           <p className="small mb-0" style={{ color: 'rgba(255,255,255,0.4)' }}>
             Built with <i className="bi bi-heart-fill text-danger"></i> for our customers
           </p>
