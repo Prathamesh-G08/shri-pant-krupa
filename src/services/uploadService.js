@@ -1,80 +1,63 @@
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage'
-import { storage } from '../firebase/config'
+/**
+ * Image upload service using ImgBB API.
+ * ImgBB is free forever — no credit card, no expiry.
+ * Images are stored on ImgBB servers and we save the URL in Firestore.
+ */
+
+const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY
+const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload'
 
 /**
- * Uploads a product image to Firebase Storage.
- * Stores images under: products/{timestamp}_{filename}
+ * Uploads an image file to ImgBB.
+ * Returns the permanent display URL of the uploaded image.
  *
  * @param {File} file - The image file to upload
- * @param {Function} onProgress - Optional callback(percent) for upload progress
- * @returns {Promise<string>} Public download URL of the uploaded image
+ * @param {Function} onProgress - Optional callback(percent) for progress
+ * @returns {Promise<string>} Permanent URL of the uploaded image
  */
-export const uploadImage = (file, onProgress = null) => {
+export const uploadImage = async (file, onProgress = null) => {
+  const formData = new FormData()
+  formData.append('image', file)
+  formData.append('key', IMGBB_API_KEY)
+
   return new Promise((resolve, reject) => {
-    // Create a unique filename using timestamp to avoid collisions
-    const timestamp = Date.now()
-    const cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_')
-    const filePath = `products/${timestamp}_${cleanName}`
+    const xhr = new XMLHttpRequest()
 
-    const storageRef = ref(storage, filePath)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        // Report upload progress
-        if (onProgress) {
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
+    // Track upload progress
+    if (onProgress) {
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100)
           onProgress(percent)
         }
-      },
-      (error) => {
-        // Upload failed
-        console.error('Image upload error:', error)
-        reject(new Error('Failed to upload image. Please try again.'))
-      },
-      async () => {
-        // Upload complete — get the public download URL
-        try {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-          resolve(downloadURL)
-        } catch (err) {
-          reject(new Error('Failed to get image URL after upload.'))
+      })
+    }
+
+    xhr.addEventListener('load', () => {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText)
+        if (response.success) {
+          // Return the direct display URL
+          resolve(response.data.display_url)
+        } else {
+          reject(new Error('ImgBB upload failed: ' + response.error?.message))
         }
+      } else {
+        reject(new Error(`Upload failed with status: ${xhr.status}`))
       }
-    )
+    })
+
+    xhr.addEventListener('error', () => {
+      reject(new Error('Network error during image upload. Please try again.'))
+    })
+
+    xhr.open('POST', IMGBB_UPLOAD_URL)
+    xhr.send(formData)
   })
 }
 
 /**
- * Deletes an image from Firebase Storage using its full download URL.
- * Called when a product is deleted or its image is replaced.
- *
- * @param {string} imageUrl - The full Firebase Storage download URL
- * @returns {Promise<void>}
- */
-export const deleteImage = async (imageUrl) => {
-  if (!imageUrl) return
-  try {
-    // Extract the storage path from the URL and create a reference
-    const imageRef = ref(storage, imageUrl)
-    await deleteObject(imageRef)
-  } catch (error) {
-    // Non-fatal: log but don't throw — product deletion should still proceed
-    console.warn('Could not delete image from storage:', error.message)
-  }
-}
-
-/**
  * Validates an image file before upload.
- * Checks file type and size.
  *
  * @param {File} file
  * @returns {{ valid: boolean, error: string|null }}

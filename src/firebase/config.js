@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-import { getStorage } from 'firebase/storage'
 
 /**
  * Firebase project configuration.
@@ -25,8 +24,5 @@ export const db = getFirestore(app)
 
 // Firebase Authentication instance
 export const auth = getAuth(app)
-
-// Firebase Storage instance (for product images)
-export const storage = getStorage(app)
 
 export default app
