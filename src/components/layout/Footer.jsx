@@ -47,9 +47,8 @@ function Footer() {
             <div className="small" style={{ color: 'rgba(255,255,255,0.6)' }}>
               <div className="mb-1">
                 <i className="bi bi-geo-alt me-1"></i>
-                Shop No. 3, Sai Samrudhi Building,<br />
-                Mahada Colony, Chitralaya<br />
-              
+                Shop No. 3, Sai Samrudhi Building,
+                Mahada Colony, Chitralaya, Pune
               </div>
               <div className="mt-2">
                 <i className="bi bi-clock me-1"></i>

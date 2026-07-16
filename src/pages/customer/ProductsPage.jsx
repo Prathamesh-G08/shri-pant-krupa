@@ -68,18 +68,16 @@ function ProductsPage() {
   return (
     <div className="fade-in-up">
       {/* ── Page Header ── */}
-      <div className="bg-white border-bottom py-3">
+      <div className="bg-white border-bottom py-2 py-md-3 sticky-top" style={{ top: 56, zIndex: 40 }}>
         <div className="container">
           <div className="row align-items-center g-2">
-            <div className="col-12 col-md-6">
-              <h1 className="fw-bold mb-0" style={{ fontSize: '1.4rem' }}>
-                All Products
-              </h1>
+            <div className="d-none d-md-block col-md-6">
+              <h1 className="fw-bold mb-0" style={{ fontSize: '1.4rem' }}>All Products</h1>
               <p className="text-muted small mb-0">
-                {loading ? '...' : `${filtered.length} products found`}
+                {loading ? '…' : `${filtered.length} products found`}
               </p>
             </div>
-            {/* Search bar */}
+            {/* Search bar — always full width on mobile */}
             <div className="col-12 col-md-6">
               <form onSubmit={handleSearch}>
                 <div className="input-group">
@@ -91,11 +89,15 @@ function ProductsPage() {
                     onChange={e => setSearchQuery(e.target.value)}
                     aria-label="Search products"
                   />
-                  <button className="btn btn-success" type="submit">
+                  <button className="btn btn-success" type="submit" aria-label="Search">
                     <i className="bi bi-search"></i>
                   </button>
                 </div>
               </form>
+              {/* Product count on mobile below search */}
+              <p className="text-muted small mb-0 mt-1 d-md-none">
+                {loading ? '…' : `${filtered.length} products found`}
+              </p>
             </div>
           </div>
         </div>
