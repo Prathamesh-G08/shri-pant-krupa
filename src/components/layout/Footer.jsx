@@ -137,7 +137,7 @@ function Footer() {
           </p>
 
           <p className="small mb-0" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            Built with <i className="bi bi-heart-fill text-danger"></i> for our customers
+            Designed and Developed by Prathamesh Gaddennavar
           </p>
         </div>
       </div>
