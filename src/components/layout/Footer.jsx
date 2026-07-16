@@ -48,7 +48,7 @@ function Footer() {
               <div className="mb-1">
                 <i className="bi bi-geo-alt me-1"></i>
                 Shop No. 3, Sai Samrudhi Building,
-                Mahada Colony, Chitralaya, Pune
+                Mahada Colony, Chitralaya
               </div>
               <div className="mt-2">
                 <i className="bi bi-clock me-1"></i>

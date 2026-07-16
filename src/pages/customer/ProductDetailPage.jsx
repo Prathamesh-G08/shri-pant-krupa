@@ -56,8 +56,13 @@ function ProductDetailPage() {
           {/* ── Product Image ── */}
           <div className="col-12 col-md-5">
             <div
-              className="position-relative rounded-3 overflow-hidden bg-light"
-              style={{ cursor: 'zoom-in' }}
+              className="position-relative rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
+              style={{
+                cursor: 'zoom-in',
+                minHeight: 240,
+                maxHeight: 420,
+                padding: 8,
+              }}
               onClick={() => !isOutOfStock && setZoomOpen(true)}
               role="button"
               aria-label="Click to zoom image"
@@ -65,8 +70,15 @@ function ProductDetailPage() {
               <img
                 src={imageUrl || PLACEHOLDER}
                 alt={name}
-                className="w-100"
-                style={{ maxHeight: 380, objectFit: 'contain', display: 'block' }}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: 400,
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                  borderRadius: 8,
+                }}
                 onError={e => { e.target.src = PLACEHOLDER }}
               />
               {/* Zoom hint */}

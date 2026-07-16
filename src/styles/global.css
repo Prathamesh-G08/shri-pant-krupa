@@ -115,10 +115,11 @@ a:hover {
 }
 
 .product-card .card-img-top {
-  object-fit: cover;
+  object-fit: contain;
   height: 180px;
   width: 100%;
-  background-color: #f0f0f0;
+  background-color: #f8f9fa;
+  padding: 6px;
 }
 
 /* ── Badges ── */
@@ -397,6 +398,7 @@ a:hover {
 
   .product-card .card-img-top {
     height: 160px;
+    padding: 4px;
   }
 
   .section-title {
@@ -429,6 +431,7 @@ a:hover {
 @media (max-width: 576px) {
   .product-card .card-img-top {
     height: 145px;
+    padding: 4px;
   }
 
   /* Stack footer columns */

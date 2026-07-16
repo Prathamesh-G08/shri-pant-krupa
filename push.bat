@@ -1,5 +1,5 @@
 @echo off
 git add -A
-git commit -m "Fix footer address, lazy loading, scroll to top, mobile search bar"
+git commit -m "Remove Pune from footer, fix image auto-fit on all screens"
 git push origin main
 echo DONE
