@@ -1,5 +1,5 @@
 @echo off
 git add -A
-git commit -m "Remove Pune from footer, fix image auto-fit on all screens"
+git commit -m "Fix scroll restoration - back button returns to same position"
 git push origin main
 echo DONE

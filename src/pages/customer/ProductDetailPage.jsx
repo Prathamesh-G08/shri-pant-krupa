@@ -13,7 +13,7 @@ function ProductDetailPage() {
   const { product, loading, error } = useProduct(id)
   const [zoomOpen, setZoomOpen] = useState(false)
 
-  // Scroll to top whenever a product page opens
+  // Product detail always starts at top (handled by useScrollRestoration in CustomerLayout)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [id])
